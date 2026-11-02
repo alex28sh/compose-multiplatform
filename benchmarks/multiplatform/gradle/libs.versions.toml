@@ -2,7 +2,7 @@
 activity-compose = "1.12.1"
 agp = "9.1.1"
 compose-multiplatform = "1.12.1"
-kotlin = "2.4.20"
+kotlin = "2.5.0-Beta2"
 kotlinx-coroutines = "1.11.0"
 kotlinx-serialization = "1.11.0"
 kotlinx-io = "0.9.1"

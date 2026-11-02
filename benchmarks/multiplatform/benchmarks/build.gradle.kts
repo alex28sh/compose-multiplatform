@@ -1,6 +1,8 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
+import org.jetbrains.kotlin.gradle.targets.wasm.d8.D8EnvSpec
 import org.jetbrains.kotlin.gradle.targets.wasm.d8.D8Exec
+import org.jetbrains.kotlin.gradle.targets.wasm.d8.D8Plugin
 import kotlin.text.replace
 
 plugins {
@@ -59,6 +61,7 @@ kotlin {
         binaries.executable()
         d8 {
             compilerOptions.freeCompilerArgs.add("-Xwasm-attach-js-exception")
+            compilerOptions.freeCompilerArgs.add("-Xwasm-use-stack-switching-proposal")
             runTask {
                 // It aborts even on coroutine cancellation exceptions:
                 // d8Args.add("--abort-on-uncaught-exception")
@@ -151,6 +154,11 @@ compose.desktop {
 val runArguments: String? by project
 
 val kotlinVersion = libs.versions.kotlin
+
+// Pin the V8 (d8) version used by the D8 run tasks instead of the Kotlin Gradle plugin default.
+plugins.withType<D8Plugin> {
+    the<D8EnvSpec>().version.set("15.1.1")
+}
 
 // Prepare the standalone D8 runtime in a separate script to keep this build file focused.
 apply(from = rootProject.file("gradle/wasm-d8-runtime.gradle.kts"))
